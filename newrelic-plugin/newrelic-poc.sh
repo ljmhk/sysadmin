@@ -11,8 +11,9 @@ function configuration {
 }
 
 function gather_metrics {
-    /usr/bin/varnishstat -f cache_hit,cache_miss,backend_conn,backend_unhealthy,backend_busy,backend_fail,backend_unused,backend_req,backend_retry,client_conn,client_req,client_drop -x | awk -F'\t' {'print $3'} | egrep -i "name|value" | tr '\n' ' ' | sed 's/<[name>]\+>/"Component\/Varnish\//g' | sed 's/<[/name>]\+>/\[Total\]"/g' | sed 's/<[value>]\+>/: \[/g'| sed 's/<\/value>/\n/g' | sed 's/ //g' | awk -F[ {'print $1"["$2""$3","'}
-    /usr/bin/varnishstat -f uptime -x | awk -F'\t' {'print $3'} | egrep -i "name|value" | tr '\n' ' ' | sed 's/<[name>]\+>/"Component\/Varnish\//g' | sed 's/<[/name>]\+>/\[Total\]"/g' | sed 's/<[value>]\+>/: \[/g'| sed 's/<\/value>/\n/g' | sed 's/ //g' | awk -F[ {'print $1"["$2""$3""'}
+    /usr/bin/varnishstat -f cache_hit,cache_miss,backend_conn,backend_unhealthy,backend_busy,backend_fail,backend_unused,backend_req,backend_retry -1 | awk {'print "\"Component/Varnish/"$1"[Total]\":"$2","'}
+    /usr/bin/varnishstat -f s_sess,s_req,s_pipe,s_pass,s_fetch,s_hdrbytes,s_bodybytes,client_conn,client_req,client_drop -1 | awk {'print "\"Component/Varnish/"$1"[Avg]\":"$3","'}
+    /usr/bin/varnishstat -f uptime -1 | awk {'print "\"Component/Varnish/"$1"[Avg]\":"$3"'}
 }
 
 function writejson {
