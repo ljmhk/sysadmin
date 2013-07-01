@@ -75,4 +75,3 @@ if [ -z "$zabbix" ];
     else
         passcheck_zab
     fi
--
