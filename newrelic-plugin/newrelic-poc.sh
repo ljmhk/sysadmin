@@ -11,9 +11,9 @@ function configuration {
 }
 
 function gather_metrics {
-    /usr/bin/varnishstat -f cache_hit,cache_miss,backend_conn,backend_unhealthy,backend_busy,backend_fail,backend_unused,backend_req,backend_retry -1 | awk {'print "\"Component/Varnish/"$1"[Total]\":"$2","'}
-    /usr/bin/varnishstat -f s_sess,s_req,s_pipe,s_pass,s_fetch,s_hdrbytes,s_bodybytes,client_conn,client_req,client_drop -1 | awk {'print "\"Component/Varnish/"$1"[Avg]\":"$3","'}
-    /usr/bin/varnishstat -f uptime -1 | awk {'print "\"Component/Varnish/"$1"[Avg]\":"$3"'}
+    /usr/bin/varnishstat -f cache_hit,cache_miss,backend_unhealthy,backend_busy,backend_fail,backend_unused,backend_retry,backend_conn,backend_req,s_sess,s_req,s_pipe,s_pass,s_fetch,s_hdrbytes,s_bodybytes,client_conn,client_req,client_drop -1 | awk {'print "\"Component/Varnish/"$1"[Avg]\":"$3","'}
+    top -b -n 1 | awk '{if ($2 == "varnish") print "\"Component/Varnish/sys_cpu[Avg]\":"$9",\n""\"Component/Varnish/sys_mem[Avg]\":" $10",";}'
+    /usr/bin/varnishstat -f uptime -1 | awk {'print "\"Component/Varnish/"$1"[Avg]\":"$3""'}
 }
 
 function writejson {
