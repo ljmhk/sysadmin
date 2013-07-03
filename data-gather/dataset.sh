@@ -28,3 +28,8 @@
     echo search_url >> $tmpfile_srch
     mysql --silent -N -h$dbhost -u$dbuser $dbpass $dbname -e "select query_text from catalogsearch_query where num_results < 10;" >> $tmpfile_srch
     mv $tmpfile_srch ./search_url.csv
+
+    sed -i '/NULL/d' ./product_url.csv
+    sed -i '/NULL/d' ./category_url.csv
+    sed -i '/NULL/d' ./search_url.csv
+    sed -i '/.\{3\}/!d' ./search_url.csv
